@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TennisScoreCalculator", "TennisScoreCalculator\TennisScoreCalculator.csproj", "{1FC2813E-0ABE-464A-BFEA-FAB4425D383A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TennisScoreCalculator.tests", "TennisScoreCalculator.tests\TennisScoreCalculator.tests.csproj", "{0338E38E-6D05-4AF8-A2A9-6EF10AB62DBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1FC2813E-0ABE-464A-BFEA-FAB4425D383A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FC2813E-0ABE-464A-BFEA-FAB4425D383A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FC2813E-0ABE-464A-BFEA-FAB4425D383A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0338E38E-6D05-4AF8-A2A9-6EF10AB62DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0338E38E-6D05-4AF8-A2A9-6EF10AB62DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0338E38E-6D05-4AF8-A2A9-6EF10AB62DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0338E38E-6D05-4AF8-A2A9-6EF10AB62DBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
