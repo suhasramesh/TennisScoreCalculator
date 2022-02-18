@@ -22,6 +22,17 @@ namespace Models
             }
         }
 
+        private Player m_ServingPlayer = null;
+        public Player ServingPlayer
+        {
+            get => m_ServingPlayer;
+            set
+            {
+                m_ServingPlayer = value;
+                InvokePropertyChanged(() => ServingPlayer);
+            }
+        }
+
         private bool m_Deuce = false;
         public bool Deuce
         {
@@ -57,18 +68,25 @@ namespace Models
         {
             try
             {
-                if (Player1.GotPoint)
+                if (ServingPlayer.Name == Player1.Name)
                 {
                     Player1.CurrentScore = GetPlayerCurrentScore(Player1.CurrentScore);
                 }
-                else if(Player2.GotPoint)
+                else if(ServingPlayer.Name == Player2.Name)
                 {
                     Player2.CurrentScore = GetPlayerCurrentScore(Player2.CurrentScore);
                 }
                 //Check deuce condition
+                Deuce = false;
                 if (CheckDeuce())
                 {
                     Deuce = true;
+                    Player1.Advantage = false;
+                    Player2.Advantage = false;
+                }
+                else
+                {
+                    CheckAdvantage(); // Check Advantage
                 }
             }
             catch (Exception e)
@@ -78,7 +96,12 @@ namespace Models
         }
         private bool CheckDeuce()
         {
-            return this.Player1.CurrentScore == this.Player2.CurrentScore && this.Player1.CurrentScore == 40;
+            return this.Player1.CurrentScore == this.Player2.CurrentScore && this.Player1.CurrentScore >= 40;
+        }
+        private void CheckAdvantage()
+        {
+           Player1.Advantage = Player1.CurrentScore > 40 && Player1.CurrentScore > Player2.CurrentScore;
+           Player2.Advantage = Player2.CurrentScore > 40 && Player2.CurrentScore > Player1.CurrentScore;
         }
     }
 }

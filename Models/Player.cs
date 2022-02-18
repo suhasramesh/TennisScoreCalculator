@@ -22,7 +22,6 @@ namespace Models
         public bool Advantage { get; set; }
 
         public int CurrentScore { get; set; }
-        public bool GotPoint { get; set; }
 
         public Player() { }
         public Player(string name)
