@@ -64,29 +64,43 @@ namespace Models
             }
             return currentScore;
         }
-        public void ServeCompleted()
+        public void ServeCompleted(string playerNameWithPoint)
         {
             try
             {
-                if (ServingPlayer.Name == Player1.Name)
+                if (playerNameWithPoint == Player1.Name)
                 {
                     Player1.CurrentScore = GetPlayerCurrentScore(Player1.CurrentScore);
                 }
-                else if(ServingPlayer.Name == Player2.Name)
+                else if(playerNameWithPoint == Player2.Name)
                 {
                     Player2.CurrentScore = GetPlayerCurrentScore(Player2.CurrentScore);
                 }
                 //Check deuce condition
                 Deuce = false;
+                Player1.Advantage = false;
+                Player2.Advantage = false;
+                Player1.HasWin = false;
+                Player2.HasWin = false;
+
                 if (CheckDeuce())
                 {
                     Deuce = true;
-                    Player1.Advantage = false;
-                    Player2.Advantage = false;
+                }
+                else if(CheckSetPointWin())// Check win
+                {
+                    if (Player1.HasWin)
+                    {
+                        Player1.SetPoint++;
+                    }
+                    else
+                    {
+                        Player2.SetPoint++;
+                    }
                 }
                 else
                 {
-                    CheckAdvantage(); // Check Advantage
+                    CheckAdvantage();
                 }
             }
             catch (Exception e)
@@ -102,6 +116,13 @@ namespace Models
         {
            Player1.Advantage = Player1.CurrentScore > 40 && Player1.CurrentScore > Player2.CurrentScore;
            Player2.Advantage = Player2.CurrentScore > 40 && Player2.CurrentScore > Player1.CurrentScore;
+        }
+
+        private bool CheckSetPointWin()
+        {
+            Player1.HasWin = Player1.CurrentScore > 40 && Player1.CurrentScore >= Player2.CurrentScore + 30;
+            Player2.HasWin = Player2.CurrentScore > 40 && Player2.CurrentScore >= Player1.CurrentScore + 30;
+            return Player1.HasWin || Player2.HasWin;
         }
     }
 }

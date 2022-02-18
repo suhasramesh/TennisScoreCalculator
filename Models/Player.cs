@@ -13,9 +13,11 @@ namespace Models
 
         public PerfomanceAnalyser Performace { get; set; }
 
-        public double SetsWon { get; set; }
+        public int SetsWon { get; set; }
 
-        public List<double> SetPoints { get; set; }
+        public int SetPoint { get; set; }
+
+        public List<int> SetPoints { get; set; }
 
         public bool HasWin { get; set; }
 

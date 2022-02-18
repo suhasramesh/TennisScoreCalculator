@@ -25,49 +25,38 @@ namespace TennisScoreCalculator.tests
 
             Player John = players[0];
             Player Kevin = players[1];
-
-            Player ServingPlayer = Kevin;
-            Analyser.ServingPlayer = ServingPlayer;
+            
             John.CurrentScore = 40;
             Kevin.CurrentScore = 30;
-            Analyser.ServeCompleted();
+            Analyser.ServeCompleted(Kevin.Name);
 
             Assert.True(Kevin.CurrentScore == 40);
             Assert.True(John.CurrentScore == 40);
             Assert.True(Analyser.Deuce == true);
-            
-            AssignServingPlayer(ref Analyser, ref ServingPlayer, John);
+
+            Analyser.ServeCompleted(John.Name);
             Assert.True(John.CurrentScore > 40);
             Assert.True(John.Advantage == true);
             Assert.True(Analyser.Deuce == false);
 
 
-            AssignServingPlayer(ref Analyser, ref ServingPlayer, Kevin);
+            Analyser.ServeCompleted(Kevin.Name);
             Assert.True(John.CurrentScore > 40);
             Assert.True(Kevin.CurrentScore > 40);
             Assert.True(Analyser.Deuce == true);
 
 
-            AssignServingPlayer(ref Analyser, ref ServingPlayer, John);
+            Analyser.ServeCompleted(John.Name);
             Assert.True(John.CurrentScore > 40);
             Assert.True(Kevin.CurrentScore > 40);
             Assert.True(Kevin.Advantage == false);
             Assert.True(John.Advantage == true);
 
-            AssignServingPlayer(ref Analyser, ref ServingPlayer, Kevin);
-            Assert.True(John.CurrentScore > 40);
-            Assert.True(Kevin.CurrentScore > 40);
+            Analyser.ServeCompleted(John.Name);
             Assert.True(Kevin.Advantage == false);
             Assert.True(John.Advantage == false);
-            Assert.True(Analyser.Deuce == true);
+            Assert.True(John.HasWin == true);
 
-        }
-
-        private void AssignServingPlayer(ref TennisScoringViewModel analyser, ref Player servingPlayer, Player player)
-        {
-            servingPlayer = player;
-            analyser.ServingPlayer = player;
-            analyser.ServeCompleted();
         }
     }
 }
