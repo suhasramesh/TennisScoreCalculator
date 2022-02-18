@@ -5,8 +5,58 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TennisPageControler.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="Gray"
     Title="Tennis scoring"
+    Background="White"
     mc:Ignorable="d">
-    <Grid />
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes;component/ResourceDictionary/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid Width="1800" Height="1000">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600*" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="200*" />
+        </Grid.ColumnDefinitions>
+        <Grid
+            x:Name="SpectatorsPanel"
+            Grid.Column="0"
+            Margin="20"
+            Background="Black">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Spectators Panel" Grid.Row="0" HorizontalAlignment="Center" Style="{StaticResource StdMainTextBlockStyle}"/>
+            </Grid>
+        </Grid>
+        <Path
+            Grid.Column="1"
+            Width="2"
+            Data="M0,0 L1,1"
+            Fill="{DynamicResource SideSeperatorPathColor}"
+            SnapsToDevicePixels="True"
+            Stretch="Fill"
+            Stroke="{DynamicResource SideSeperatorPathColor}" />
+        <Grid
+            x:Name="RefereePanel"
+            Grid.Column="2"
+            Margin="20"
+            Background="Gray" >
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Referee Panel" Grid.Row="0" HorizontalAlignment="Center" Style="{StaticResource StdMainTextBlockStyle}"/>
+            </Grid>
+            
+        </Grid>
+    </Grid>
 </Page>
