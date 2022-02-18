@@ -59,6 +59,10 @@
       <Project>{a43cc760-07c6-4bae-9ab0-8fa375e31da2}</Project>
       <Name>MVVmBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Themes\Themes.csproj">
+      <Project>{c2bff78a-3139-48fd-9dcb-7b9a1a526be1}</Project>
+      <Name>Themes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
