@@ -17,13 +17,12 @@ namespace Models
 
         public List<double> SetPoints { get; set; }
 
-        public bool IsDeuce { get; set; }
-
         public bool HasWin { get; set; }
 
         public bool Advantage { get; set; }
 
-        public double CurrentScore { get; set; }
+        public int CurrentScore { get; set; }
+        public bool GotPoint { get; set; }
 
         public Player() { }
         public Player(string name)
