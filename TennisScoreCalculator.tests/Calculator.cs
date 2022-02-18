@@ -27,8 +27,10 @@ namespace TennisScoreCalculator.tests
             players[1].CurrentScore = 30;
 
             players[1].GotPoint = true;
+            Analyser.ServeCompleted();
 
-            Assert.True(players[0].CurrentScore == 40);
+            Assert.True(players[1].CurrentScore == 40);
+            Assert.True(Analyser.Deuce == true);
         }
     }
 }

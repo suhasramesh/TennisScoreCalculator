@@ -39,18 +39,19 @@ namespace Models
         public void AddPlayers()
         {
             Players = new List<Player>();
-            var Player1 = new Player(m_PlayerName1);
-            var Player2 = new Player(m_PlayerName2);
+            Player1 = new Player(m_PlayerName1);
+            Player2 = new Player(m_PlayerName2);
             Players.Add(Player1);
             Players.Add(Player2);
         }
-        private void GetPlayerCurrentScore(int currentScore)
+        private int GetPlayerCurrentScore(int currentScore)
         {
             currentScore += 15;
             if (currentScore == 45)
             {
                 currentScore = 40;
             }
+            return currentScore;
         }
         public void ServeCompleted()
         {
@@ -58,17 +59,26 @@ namespace Models
             {
                 if (Player1.GotPoint)
                 {
-                    GetPlayerCurrentScore(Player1.CurrentScore);
+                    Player1.CurrentScore = GetPlayerCurrentScore(Player1.CurrentScore);
                 }
-                else
+                else if(Player2.GotPoint)
                 {
-                    GetPlayerCurrentScore(Player2.CurrentScore);
+                    Player2.CurrentScore = GetPlayerCurrentScore(Player2.CurrentScore);
+                }
+                //Check deuce condition
+                if (CheckDeuce())
+                {
+                    Deuce = true;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception caught while reading: {0}", e.Message);
             }
+        }
+        private bool CheckDeuce()
+        {
+            return this.Player1.CurrentScore == this.Player2.CurrentScore && this.Player1.CurrentScore == 40;
         }
     }
 }

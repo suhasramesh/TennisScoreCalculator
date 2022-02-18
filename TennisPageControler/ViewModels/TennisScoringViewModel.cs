@@ -14,7 +14,6 @@ namespace TennisPageControler.ViewModels
         public TennisScoringViewModel()
         {
             AddPlayers();
-            ServeCompleted();
         }
     }
 }
