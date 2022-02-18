@@ -1,5 +1,4 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TennisScoreCalculator
+namespace TennisPageControler.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TennisScoringPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TennisScoringPage : Page
     {
-        public MainWindow()
+        public TennisScoringPage()
         {
-            NavigationModel NV = new NavigationModel();
             InitializeComponent();
-            this.WindowState = WindowState.Maximized;
-            DataContext = NV;
         }
     }
 }
