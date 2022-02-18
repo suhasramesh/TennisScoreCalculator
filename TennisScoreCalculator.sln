@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TennisPageControler", "TennisPageControler\TennisPageControler.csproj", "{714E22B2-99F7-49A4-94A5-A7AA61C8BD42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVmBase", "MVVmBase\MVVmBase.csproj", "{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{714E22B2-99F7-49A4-94A5-A7AA61C8BD42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{714E22B2-99F7-49A4-94A5-A7AA61C8BD42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{714E22B2-99F7-49A4-94A5-A7AA61C8BD42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{924C344B-ACD9-4FC5-92C7-2476E617AEFE} = {B7048FD2-C121-4FE3-8B48-3CD78DE92C03}
 		{714E22B2-99F7-49A4-94A5-A7AA61C8BD42} = {B7048FD2-C121-4FE3-8B48-3CD78DE92C03}
+		{A43CC760-07C6-4BAE-9AB0-8FA375E31DA2} = {B7048FD2-C121-4FE3-8B48-3CD78DE92C03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17EE78E8-57EB-4741-950D-AD622A27ABAB}
