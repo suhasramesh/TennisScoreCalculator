@@ -15,7 +15,7 @@ namespace Models
 
         double SetsWon { get; set; }
 
-        List<SetPoints> Sets { get; set; }
+        List<double> SetPoints { get; set; }
 
         public Player() { }
         public Player(string name)
