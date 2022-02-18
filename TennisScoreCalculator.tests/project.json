@@ -1,0 +1,15 @@
+﻿{
+  "frameworks": {
+    "net48": {}
+  },
+  "runtimes": {
+    "win": {},
+    "win-x64": {},
+    "win-x86": {}
+  },
+  "dependencies": {
+    "xunit": "2.4.1",
+    "xunit.runner.console": "2.4.1",
+    "xunit.runner.visualstudio": "2.4.3"
+  }
+}
