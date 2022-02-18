@@ -9,13 +9,13 @@ namespace Models
 {
     public class Player : NotifyPropertyChanged
     {
-        string Name { get; }
+        public string Name { get; }
 
-        PerfomanceAnalyser Performace { get; set; }
+        public PerfomanceAnalyser Performace { get; set; }
 
-        double SetsWon { get; set; }
+        public double SetsWon { get; set; }
 
-        List<double> SetPoints { get; set; }
+        public List<double> SetPoints { get; set; }
 
         public Player() { }
         public Player(string name)

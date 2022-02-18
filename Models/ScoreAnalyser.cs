@@ -1,16 +1,16 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TennisPageControler.ViewModels
+namespace Models
 {
-    public class TennisScoringViewModel: Player
+    public class ScoreAnalyser: Player
     {
         public const string m_PlayerName1 = "John";
         public const string m_PlayerName2 = "Kevin";
+
         #region Properties		
         private IList<Player> m_Players = new List<Player>();
         public IList<Player> Players
@@ -23,17 +23,11 @@ namespace TennisPageControler.ViewModels
             }
         }
         #endregion
-        public TennisScoringViewModel()
-        {
-            Players =  AddPlayers();
-        }
 
-        public IList<Player> AddPlayers()
+        public void AddPlayers()
         {
-            var temPlayers = new List<Player>();
-            temPlayers.Add(new Player(m_PlayerName1));
-            temPlayers.Add(new Player(m_PlayerName2));
-            return temPlayers;
+            Players.Add(new Player(m_PlayerName1));
+            Players.Add(new Player(m_PlayerName2));
         }
     }
 }
