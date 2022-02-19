@@ -26,36 +26,35 @@ namespace TennisScoreCalculator.tests
             Player John = players[0];
             Player Kevin = players[1];
             
-            John.CurrentScore = 40;
-            Kevin.CurrentScore = 30;
-            Analyser.ServeCompleted(Kevin.Name);
+            John.CurrentPoints = 40;
+            Kevin.CurrentPoints = 30;
+            John.SetPoints[0].GamePoints = 6;
+            Kevin.SetPoints[0].GamePoints = 5;
+            
+            Analyser.SelectedPointPlayer = John;
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(John.SetPoints.Count == 2);
+            Assert.True(Kevin.SetPoints.Count == 2);
+            John.CurrentSet = John.SetPoints[1];
+            Assert.True(John.CurrentPoints == 0);
+            Assert.True(John.SetPoints[0].GamePoints == 7);
 
-            Assert.True(Kevin.CurrentScore == 40);
-            Assert.True(John.CurrentScore == 40);
-            Assert.True(Analyser.Deuce == true);
+            Analyser.SelectedPointPlayer = Kevin;
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Analyser.PushResult(PointTypeEnum.PT_Fault);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Analyser.PushResult(PointTypeEnum.PT_Fault);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
 
-            Analyser.ServeCompleted(John.Name);
-            Assert.True(John.CurrentScore > 40);
-            Assert.True(John.Advantage == true);
-            Assert.True(Analyser.Deuce == false);
-
-
-            Analyser.ServeCompleted(Kevin.Name);
-            Assert.True(John.CurrentScore > 40);
-            Assert.True(Kevin.CurrentScore > 40);
-            Assert.True(Analyser.Deuce == true);
-
-
-            Analyser.ServeCompleted(John.Name);
-            Assert.True(John.CurrentScore > 40);
-            Assert.True(Kevin.CurrentScore > 40);
-            Assert.True(Kevin.Advantage == false);
-            Assert.True(John.Advantage == true);
-
-            Analyser.ServeCompleted(John.Name);
-            Assert.True(Kevin.Advantage == false);
-            Assert.True(John.Advantage == false);
-            Assert.True(John.HasWin == true);
+            Assert.True(John.CurrentPoints > 40);
+            Assert.True(Kevin.CurrentPoints == 30);
+            Assert.True(John.HasGameWin == true);
+            Assert.True(Kevin.HasGameWin == false);
+            
 
         }
     }

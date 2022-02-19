@@ -12,23 +12,24 @@ namespace Models
         public string Name { get; }
 
         public PerfomanceAnalyser Performace { get; set; }
+        
+        public List<Sets> SetPoints { get; set; }
 
-        public int SetsWon { get; set; }
-
-        public int SetPoint { get; set; }
-
-        public List<int> SetPoints { get; set; }
-
-        public bool HasWin { get; set; }
+        public bool HasGameWin { get; set; }
 
         public bool Advantage { get; set; }
 
-        public int CurrentScore { get; set; }
+        public int CurrentPoints { get; set; }
+        public Sets CurrentSet { get; set; }
 
         public Player() { }
         public Player(string name)
         {
             this.Name = name;
+            this.SetPoints = new List<Sets>();
+            this.Performace = new PerfomanceAnalyser();
+            this.CurrentSet = new Sets();
+            this.SetPoints.Add(this.CurrentSet);
         }
     }
 }

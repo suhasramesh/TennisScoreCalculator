@@ -22,14 +22,14 @@ namespace Models
             }
         }
 
-        private Player m_ServingPlayer = null;
-        public Player ServingPlayer
+        private Player m_SelectedPointPlayer = null;
+        public Player SelectedPointPlayer
         {
-            get => m_ServingPlayer;
+            get => m_SelectedPointPlayer;
             set
             {
-                m_ServingPlayer = value;
-                InvokePropertyChanged(() => ServingPlayer);
+                m_SelectedPointPlayer = value;
+                InvokePropertyChanged(() => SelectedPointPlayer);
             }
         }
 
@@ -43,9 +43,23 @@ namespace Models
                 InvokePropertyChanged(() => Deuce);
             }
         }
+
+        private bool m_PlayerChanged = false;
+        public bool PlayerChanged
+        {
+            get => m_PlayerChanged;
+            set
+            {
+                m_PlayerChanged = value;
+                InvokePropertyChanged(() => PlayerChanged);
+            }
+        }
         #endregion
         private Player Player1 { get; set; }
         private Player Player2 { get; set; }
+
+        public bool PreviousServeOnFault { get; set; }
+        public bool PreviousServePoint { get; set; }
 
         public void AddPlayers()
         {
@@ -55,14 +69,54 @@ namespace Models
             Players.Add(Player1);
             Players.Add(Player2);
         }
-        private int GetPlayerCurrentScore(int currentScore)
+        private int GetPlayerCurrentPoints(int currentPoints)
         {
-            currentScore += 15;
-            if (currentScore == 45)
+            currentPoints += 15;
+            if (currentPoints == 45)
             {
-                currentScore = 40;
+                currentPoints = 40;
             }
-            return currentScore;
+            return currentPoints;
+        }
+        public void PushResult(PointTypeEnum selectedPointType)
+        {
+            if (selectedPointType == PointTypeEnum.PT_Ace)
+            {
+                SelectedPointPlayer.Performace.Aces++;
+            }
+            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && PreviousServeOnFault && !PlayerChanged)
+            {
+                SelectedPointPlayer.Performace.DoubleFaults++;
+                PreviousServeOnFault = false;
+            }
+            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && !PreviousServeOnFault)
+            {
+                PreviousServeOnFault = true; // store previous result
+                return;
+            }
+           // else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint|| PlayerChanged))
+           // {
+           //     SelectedPointPlayer.Performace.FirstServePoints++;
+           // }
+           //else if(selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged)
+           // {
+           //     SelectedPointPlayer.Performace.SecondServePoints++;
+           // }
+
+            foreach (var player in Players)
+            {
+                if(SelectedPointPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
+                {
+                    ServeCompleted(player.Name);
+                }
+                else if(SelectedPointPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
+                {
+                    ServeCompleted(player.Name);
+                }
+            }
+            PlayerChanged = false;
+
+            PreviousServePoint = (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace) ? true : false;
         }
         public void ServeCompleted(string playerNameWithPoint)
         {
@@ -70,32 +124,45 @@ namespace Models
             {
                 if (playerNameWithPoint == Player1.Name)
                 {
-                    Player1.CurrentScore = GetPlayerCurrentScore(Player1.CurrentScore);
+                    Player1.CurrentPoints = GetPlayerCurrentPoints(Player1.CurrentPoints);
                 }
                 else if(playerNameWithPoint == Player2.Name)
                 {
-                    Player2.CurrentScore = GetPlayerCurrentScore(Player2.CurrentScore);
+                    Player2.CurrentPoints = GetPlayerCurrentPoints(Player2.CurrentPoints);
                 }
                 //Check deuce condition
                 Deuce = false;
                 Player1.Advantage = false;
                 Player2.Advantage = false;
-                Player1.HasWin = false;
-                Player2.HasWin = false;
+                Player1.HasGameWin = false;
+                Player2.HasGameWin = false;
 
                 if (CheckDeuce())
                 {
                     Deuce = true;
                 }
-                else if(CheckSetPointWin())// Check win
+                else if(CheckGamePointWin())// Check win
                 {
-                    if (Player1.HasWin)
+                    if (Player1.HasGameWin)
                     {
-                        Player1.SetPoint++;
+                        Player1.CurrentSet.GamePoints++;
                     }
                     else
                     {
-                        Player2.SetPoint++;
+                        Player2.CurrentSet.GamePoints++;
+
+                    }
+                    bool setWinPlayer1 = Player1.CurrentSet.GamePoints >= Player2.CurrentSet.GamePoints + 2 ? true : false;
+                    bool setWinPlayer2 = Player2.CurrentSet.GamePoints >= Player1.CurrentSet.GamePoints + 2 ? true : false;
+                    if (setWinPlayer1 || setWinPlayer2)
+                    {
+                        Player1.CurrentSet = new Sets();
+                        Player1.CurrentPoints = 0;
+                        Player1.SetPoints.Add(Player1.CurrentSet);
+
+                        Player2.CurrentSet = new Sets();
+                        Player2.CurrentPoints = 0;
+                        Player2.SetPoints.Add(Player2.CurrentSet);
                     }
                 }
                 else
@@ -108,21 +175,23 @@ namespace Models
                 Console.WriteLine("Exception caught while reading: {0}", e.Message);
             }
         }
+
         private bool CheckDeuce()
         {
-            return this.Player1.CurrentScore == this.Player2.CurrentScore && this.Player1.CurrentScore >= 40;
+            return Player1.CurrentPoints == Player2.CurrentPoints && Player1.CurrentPoints >= 40;
         }
         private void CheckAdvantage()
         {
-           Player1.Advantage = Player1.CurrentScore > 40 && Player1.CurrentScore > Player2.CurrentScore;
-           Player2.Advantage = Player2.CurrentScore > 40 && Player2.CurrentScore > Player1.CurrentScore;
+           Player1.Advantage = Player1.CurrentPoints > 40 && Player1.CurrentPoints > Player2.CurrentPoints;
+           Player2.Advantage = Player2.CurrentPoints > 40 && Player2.CurrentPoints > Player1.CurrentPoints;
         }
-
-        private bool CheckSetPointWin()
+        private bool CheckGamePointWin()
         {
-            Player1.HasWin = Player1.CurrentScore > 40 && Player1.CurrentScore >= Player2.CurrentScore + 30;
-            Player2.HasWin = Player2.CurrentScore > 40 && Player2.CurrentScore >= Player1.CurrentScore + 30;
-            return Player1.HasWin || Player2.HasWin;
+            Player1.HasGameWin = Player1.CurrentPoints > 40 
+                                 && (Player1.CurrentPoints >= Player2.CurrentPoints + 30 || Player2.CurrentPoints <= 30);
+            Player2.HasGameWin = Player2.CurrentPoints > 40 
+                                 && (Player2.CurrentPoints >= Player1.CurrentPoints + 30 || Player1.CurrentPoints <= 30);
+            return Player1.HasGameWin || Player2.HasGameWin;
         }
     }
 }

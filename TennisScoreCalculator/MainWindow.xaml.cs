@@ -27,7 +27,7 @@ namespace TennisScoreCalculator
             InitializeComponent();
             this.WindowState = WindowState.Maximized;
             DataContext = NV;
-            NV.SelectedViewModel = new TennisPageControler.Pages.TennisScoringPage();
+            NV.SelectedViewModel = new TennisPageControler.ViewModels.TennisScoringViewModel();
         }
     }
 }

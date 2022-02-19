@@ -8,10 +8,9 @@ namespace Models
 {
     public class PerfomanceAnalyser
     {
-        double Aces { get; set; }
-        double DoubleFaults { get; set; }
-        double FirstServeInPercentage { get; set; }
-        double FirstServePointsWonPercentage {get;set;}
-        double SecondServePointsWonPercentage { get; set; }
+        public double Aces { get; set; }
+        public double DoubleFaults { get; set; }
+        public double FirstServePoints {get;set;}
+        public double SecondServePoints { get; set; }
     }
 }
