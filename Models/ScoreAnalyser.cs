@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Models
 {
@@ -54,6 +56,31 @@ namespace Models
                 InvokePropertyChanged(() => PlayerChanged);
             }
         }
+
+        private Sets m_Player1CurrentSet = null;
+        public Sets Player1CurrentSet
+        {
+            get => m_Player1CurrentSet;
+            set
+            {
+                m_Player1CurrentSet = value;
+                Player1.CurrentPoints = 0;
+                InvokePropertyChanged(() => Player1CurrentSet);
+            }
+        }
+
+        private Sets m_Player2CurrentSet = null;
+        public Sets Player2CurrentSet
+        {
+            get => m_Player2CurrentSet;
+            set
+            {
+                m_Player2CurrentSet = value;
+                Player2.CurrentPoints = 0;
+                InvokePropertyChanged(() => Player2CurrentSet);
+            }
+        }
+
         #endregion
         private Player Player1 { get; set; }
         private Player Player2 { get; set; }
@@ -68,6 +95,8 @@ namespace Models
             Player2 = new Player(m_PlayerName2);
             Players.Add(Player1);
             Players.Add(Player2);
+            Player1CurrentSet = Player1.SetPoints[0];
+            Player2CurrentSet = Player2.SetPoints[0];
         }
         private int GetPlayerCurrentPoints(int currentPoints)
         {
@@ -80,6 +109,10 @@ namespace Models
         }
         public void PushResult(PointTypeEnum selectedPointType)
         {
+            if(SelectedPointPlayer == null)
+            {
+                return;
+            }
             if (selectedPointType == PointTypeEnum.PT_Ace)
             {
                 SelectedPointPlayer.Performace.Aces++;
@@ -108,10 +141,12 @@ namespace Models
                 if(SelectedPointPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
                 {
                     ServeCompleted(player.Name);
+                    break;
                 }
                 else if(SelectedPointPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
                 {
                     ServeCompleted(player.Name);
+                    break;
                 }
             }
             PlayerChanged = false;
@@ -145,24 +180,31 @@ namespace Models
                 {
                     if (Player1.HasGameWin)
                     {
-                        Player1.CurrentSet.GamePoints++;
+                        Player1CurrentSet.GamePoints++;
                     }
                     else
                     {
-                        Player2.CurrentSet.GamePoints++;
-
+                        Player2CurrentSet.GamePoints++;
                     }
-                    bool setWinPlayer1 = Player1.CurrentSet.GamePoints >= Player2.CurrentSet.GamePoints + 2 ? true : false;
-                    bool setWinPlayer2 = Player2.CurrentSet.GamePoints >= Player1.CurrentSet.GamePoints + 2 ? true : false;
+                    bool setWinPlayer1 = Player1CurrentSet.GamePoints >= Player2CurrentSet.GamePoints + 2 ? true : false;
+                    bool setWinPlayer2 = Player2CurrentSet.GamePoints >= Player1CurrentSet.GamePoints + 2 ? true : false;
                     if (setWinPlayer1 || setWinPlayer2)
                     {
-                        Player1.CurrentSet = new Sets();
-                        Player1.CurrentPoints = 0;
-                        Player1.SetPoints.Add(Player1.CurrentSet);
+                        if(Player1CurrentSet.SetNumber < Player1.SetPoints.Count)
+                        {
+                            Player1CurrentSet = Player1.SetPoints[Player1CurrentSet.SetNumber];
+                            Player2CurrentSet = Player2.SetPoints[Player1CurrentSet.SetNumber];
+                        }
+                        else
+                        {
+                            Player1CurrentSet = new Sets();
+                            Player1CurrentSet.SetNumber = Player1.SetPoints.Count;
+                            Player1.SetPoints.Add(Player1CurrentSet);
 
-                        Player2.CurrentSet = new Sets();
-                        Player2.CurrentPoints = 0;
-                        Player2.SetPoints.Add(Player2.CurrentSet);
+                            Player2CurrentSet = new Sets();
+                            Player2CurrentSet.SetNumber = Player2.SetPoints.Count;
+                            Player2.SetPoints.Add(Player2CurrentSet);
+                        }
                     }
                 }
                 else

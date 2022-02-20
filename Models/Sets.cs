@@ -9,6 +9,16 @@ namespace Models
 {
     public class Sets : NotifyPropertyChanged
     {
-        public int GamePoints { get; set; }
+        private int m_GamePoints = 0;
+        public int GamePoints
+        {
+            get => m_GamePoints;
+            set
+            {
+                m_GamePoints = value;
+                InvokePropertyChanged(() => GamePoints);
+            }
+        }
+        public int SetNumber { get; set; }
     }
 }
