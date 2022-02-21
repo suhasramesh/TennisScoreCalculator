@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvvmBase;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,10 +9,11 @@ using System.Windows;
 
 namespace Models
 {
-    public class ScoreAnalyser: Player
+    public class ScoreAnalyser: NotifyPropertyChanged
     {
         const string m_PlayerName1 = "John";
         const string m_PlayerName2 = "Kevin";
+
         #region Properties		
         private IList<Player> m_Players = new List<Player>();
         public IList<Player> Players
@@ -35,25 +37,16 @@ namespace Models
             }
         }
 
-        private bool m_Deuce = false;
-        public bool Deuce
-        {
-            get => m_Deuce;
-            set
-            {
-                m_Deuce = value;
-                InvokePropertyChanged(() => Deuce);
-            }
-        }
 
-        private bool m_PlayerChanged = false;
-        public bool PlayerChanged
+
+        private string m_MatchWinner = "";
+        public string MatchWinner
         {
-            get => m_PlayerChanged;
+            get => m_MatchWinner;
             set
             {
-                m_PlayerChanged = value;
-                InvokePropertyChanged(() => PlayerChanged);
+                m_MatchWinner = value;
+                InvokePropertyChanged(() => MatchWinner);
             }
         }
 
@@ -65,6 +58,7 @@ namespace Models
             {
                 m_Player1CurrentSet = value;
                 Player1.CurrentPoints = 0;
+                Player1CurrentSet.GamePoints = 0;
                 InvokePropertyChanged(() => Player1CurrentSet);
             }
         }
@@ -77,29 +71,27 @@ namespace Models
             {
                 m_Player2CurrentSet = value;
                 Player2.CurrentPoints = 0;
+                Player2CurrentSet.GamePoints = 0;
                 InvokePropertyChanged(() => Player2CurrentSet);
             }
         }
 
         #endregion
-        private Player Player1 { get; set; }
-        private Player Player2 { get; set; }
+        protected Player Player1 { get; set; }
+        protected Player Player2 { get; set; }
+        private int CurrentSetNumber { get; set; }
 
         public bool PreviousServeOnFault { get; set; }
         public bool PreviousServePoint { get; set; }
+
+        public bool Deuce { get; set; }
+        public bool PlayerChanged { get; set; }
 
         private void SetServe()
         {
             foreach(var player in Players)
             {
-                if(SelectedServingPlayer.Name == player.Name)
-                {
-                    player.IsServe = true;
-                }
-                else
-                {
-                    player.IsServe = false;
-                }
+                player.IsServe = SelectedServingPlayer.Name == player.Name ? true : false;
             }
         }
         public void AddPlayers()
@@ -112,6 +104,7 @@ namespace Models
             Player1CurrentSet = Player1.SetPoints[0];
             Player2CurrentSet = Player2.SetPoints[0];
             SelectedServingPlayer = Player1;
+            CurrentSetNumber = 0;
         }
         private int GetPlayerCurrentPoints(int currentPoints)
         {
@@ -196,43 +189,65 @@ namespace Models
                     if (Player1.HasGameWin)
                     {
                         Player1CurrentSet.GamePoints++;
-                        Player1.CurrentPoints = 0;
                     }
                     else
                     {
                         Player2CurrentSet.GamePoints++;
-                        Player2.CurrentPoints = 0;
                     }
-                    bool setWinPlayer1 = (Player1CurrentSet.GamePoints >= 6) && Player1CurrentSet.GamePoints >= Player2CurrentSet.GamePoints + 2 ? true : false;
-                    bool setWinPlayer2 = (Player2CurrentSet.GamePoints >= 6) && Player2CurrentSet.GamePoints >= Player1CurrentSet.GamePoints + 2 ? true : false;
+                    Player1.CurrentPoints = 0;
+                    Player2.CurrentPoints = 0;
+                    bool setWinPlayer1 = ((Player1CurrentSet.GamePoints >= 6) && Player1CurrentSet.GamePoints >= Player2CurrentSet.GamePoints + 2
+                                          || (Player1CurrentSet.GamePoints >= 4 && Player2CurrentSet.GamePoints == 0)) ? true : false;
+                    bool setWinPlayer2 = ((Player2CurrentSet.GamePoints >= 6) && Player2CurrentSet.GamePoints >= Player1CurrentSet.GamePoints + 2)
+                                          || (Player2CurrentSet.GamePoints >= 4 && Player1CurrentSet.GamePoints == 0) ? true : false;
                     if (setWinPlayer1 || setWinPlayer2)
                     {
-                        if(Player1CurrentSet.SetNumber < Player1.SetPoints.Count)
+                        CurrentSetNumber++;
+                        if (setWinPlayer1)
                         {
-                            Player1CurrentSet = Player1.SetPoints[Player1CurrentSet.SetNumber];
-                            Player2CurrentSet = Player2.SetPoints[Player1CurrentSet.SetNumber];
+                            Player1.SetsWonCount++;
                         }
                         else
                         {
-                            Player1CurrentSet = new Sets();
-                            Player1CurrentSet.SetNumber = Player1.SetPoints.Count;
-                            Player1.SetPoints.Add(Player1CurrentSet);
-
-                            Player2CurrentSet = new Sets();
-                            Player2CurrentSet.SetNumber = Player2.SetPoints.Count;
-                            Player2.SetPoints.Add(Player2CurrentSet);
+                            Player2.SetsWonCount++;
                         }
+                        GetCurrentset();
                     }
                 }
                 else
                 {
                     CheckAdvantage();
                 }
+                CheckMatchWin();
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception caught while reading: {0}", e.Message);
             }
+        }
+        
+        private void GetCurrentset()
+        {
+            if (CurrentSetNumber <= Player1.SetPoints.Count)
+            {
+                Player1CurrentSet = Player1.SetPoints[CurrentSetNumber];
+                Player2CurrentSet = Player2.SetPoints[CurrentSetNumber];
+            }
+            else
+            {
+                Player1CurrentSet = new Sets();
+                Player1.SetPoints.Add(Player1CurrentSet);
+
+                Player2CurrentSet = new Sets();
+                Player2.SetPoints.Add(Player2CurrentSet);
+            }
+        }
+
+        public bool CheckMatchWin()
+        {
+           Player1.MatchWon = ((Player1.SetsWonCount >= 2) && Player1.SetsWonCount >= Player2.SetsWonCount + 1) ? true : false;
+           Player2.MatchWon = (Player2.SetsWonCount >= 2) && Player2.SetsWonCount >= Player1.SetsWonCount + 1 ? true : false;
+            return Player1.MatchWon || Player2.MatchWon;
         }
 
         private bool CheckDeuce()

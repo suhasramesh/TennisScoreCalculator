@@ -9,10 +9,6 @@ namespace Models
 {
     public class Player : NotifyPropertyChanged
     {
-        public string Name { get;}
-
-        public PerfomanceAnalyser Performace { get; set; }
-
         private IList<Sets> m_SetPoints = new List<Sets>();
         public IList<Sets> SetPoints
         {
@@ -26,8 +22,18 @@ namespace Models
         }
 
         public bool HasGameWin { get; set; }
+        
+        private bool m_Advantage = false;
+        public bool Advantage
+        {
+            get => m_Advantage;
+            set
+            {
+                m_Advantage = value;
+                InvokePropertyChanged(() => Advantage);
+            }
+        }
 
-        public bool Advantage { get; set; }
         private int m_CurrentPoints = 0;
         public int CurrentPoints
         {
@@ -36,6 +42,20 @@ namespace Models
             {
                 m_CurrentPoints = value;
                 InvokePropertyChanged(() => CurrentPoints);
+            }
+        }
+
+
+        public uint SetsWonCount { get;set; }
+
+        private bool m_MatchWon = false;
+        public bool MatchWon
+        {
+            get => m_MatchWon;
+            set
+            {
+                m_MatchWon = value;
+                InvokePropertyChanged(() => MatchWon);
             }
         }
 
@@ -49,6 +69,11 @@ namespace Models
                 InvokePropertyChanged(() => IsServe);
             }
         }
+
+        public string Name { get; }
+
+        public PerfomanceAnalyser Performace { get; set; }
+
         public Player(string name = "") 
         {
             this.Name = name;
@@ -58,8 +83,6 @@ namespace Models
             for (int iSet = 0; iSet < 3; iSet++)
             {
                 var set = new Sets();
-                set.GamePoints = 0;
-                set.SetNumber = iSet + 1;
                 this.SetPoints.Add(set);
             }
         }

@@ -11,6 +11,8 @@ namespace TennisPageControler.ViewModels
 {
     public class TennisScoringViewModel: ScoreAnalyser
     {
+        public ICommand PushToSpectorsCommand { get; set; }
+
         #region Properties	
 
         private PointTypeEnum m_SelectedPointType ;
@@ -23,21 +25,6 @@ namespace TennisPageControler.ViewModels
                 InvokePropertyChanged(() => SelectedPointType);
             }
         }
-
-        private ICommand m_PushToSpectorsCommand;
-        public ICommand PushToSpectorsCommand
-        {
-            get
-            {
-                return m_PushToSpectorsCommand;
-            }
-            set
-            {
-                m_PushToSpectorsCommand = value;
-                InvokePropertyChanged(() => PushToSpectorsCommand);
-            }
-        }
-
         private ICommand m_PlayerSelectionChangedCommand;
         public ICommand PlayerSelectionChangedCommand
         {
@@ -51,14 +38,24 @@ namespace TennisPageControler.ViewModels
                 InvokePropertyChanged(() => PlayerSelectionChangedCommand);
             }
         }
-
         #endregion
         public TennisScoringViewModel()
         {
-            AddPlayers();
+            StartMatch();
             PushToSpectorsCommand = new RelayCommand((o) =>
             {
                 PushResult(SelectedPointType);
+                if (CheckMatchWin())
+                {
+                    if (Player1.MatchWon)
+                    {
+                        MatchWinner = string.Format(Resource.StringResource.MatchWinner, Player1.Name);
+                    }
+                    else
+                    {
+                        MatchWinner = string.Format(Resource.StringResource.MatchWinner, Player2.Name);
+                    }
+                }
             });
             PlayerSelectionChangedCommand = new RelayCommand((o) =>
             {
@@ -66,6 +63,11 @@ namespace TennisPageControler.ViewModels
                 PreviousServeOnFault = false;
                 PreviousServePoint = false;
             });
+        }
+
+        private void StartMatch()
+        {
+            AddPlayers();
         }
     }
 }

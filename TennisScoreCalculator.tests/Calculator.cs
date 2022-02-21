@@ -40,22 +40,43 @@ namespace TennisScoreCalculator.tests
             Assert.True(Analyser.Player1CurrentSet.GamePoints == 0);
             Assert.True(John.CurrentPoints == 0);
 
+            Kevin.SetPoints[1].GamePoints = 5;
+            John.SetPoints[1].GamePoints = 3;
+
+            Analyser.SelectedServingPlayer = John;
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(John.CurrentPoints == 15);
+            Analyser.PushResult(PointTypeEnum.PT_Fault);
+            Assert.True(Kevin.CurrentPoints == 15);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Assert.True(Kevin.CurrentPoints == 30);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(John.CurrentPoints == 30);
+            Analyser.PushResult(PointTypeEnum.PT_Fault);
+            Assert.True(Kevin.CurrentPoints == 40);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Assert.True(Kevin.HasGameWin == true);
+            Assert.True(John.HasGameWin == false);
+
+
+            Assert.True(Kevin.SetsWonCount == 1);
+            Assert.True(John.SetsWonCount == 1);
+
+            Kevin.SetPoints[2].GamePoints = 3;
+            John.SetPoints[2].GamePoints = 0;
+
             Analyser.SelectedServingPlayer = Kevin;
             Analyser.PushResult(PointTypeEnum.PT_Ace);
-            Analyser.PushResult(PointTypeEnum.PT_Fault);
-            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
-            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
-            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
             Analyser.PushResult(PointTypeEnum.PT_Ace);
-            Analyser.PushResult(PointTypeEnum.PT_Fault);
-            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
-            Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Analyser.CheckMatchWin();
+            Assert.True(Kevin.MatchWon == true);
 
-            Assert.True(John.CurrentPoints > 40);
-            Assert.True(Kevin.CurrentPoints == 30);
-            Assert.True(John.HasGameWin == true);
-            Assert.True(Kevin.HasGameWin == false);
-            
+
 
         }
     }
