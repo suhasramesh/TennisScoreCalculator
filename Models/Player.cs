@@ -74,13 +74,13 @@ namespace Models
 
         public PerfomanceAnalyser Performace { get; set; }
 
-        public Player(string name = "") 
+        public Player(string name = "", int setCount = 3) 
         {
             this.Name = name;
             this.SetPoints = new List<Sets>();
             this.Performace = new PerfomanceAnalyser();
             //SR: Initailly 3 sets are added, used this for better visúalisation
-            for (int iSet = 0; iSet < 3; iSet++)
+            for (int iSet = 0; iSet < setCount; iSet++)
             {
                 var set = new Sets();
                 this.SetPoints.Add(set);

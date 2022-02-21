@@ -12,6 +12,7 @@ namespace TennisPageControler.ViewModels
     public class TennisScoringViewModel: ScoreAnalyser
     {
         public ICommand PushToSpectorsCommand { get; set; }
+        public ICommand MatchStartCommand { get; set; }
 
         #region Properties	
 
@@ -25,6 +26,18 @@ namespace TennisPageControler.ViewModels
                 InvokePropertyChanged(() => SelectedPointType);
             }
         }
+
+        private SetCountEnum m_SelectedSetCount;
+        public SetCountEnum SelectedSetCount
+        {
+            get => m_SelectedSetCount;
+            set
+            {
+                m_SelectedSetCount = value;
+                InvokePropertyChanged(() => SelectedSetCount);
+            }
+        }
+
         private ICommand m_PlayerSelectionChangedCommand;
         public ICommand PlayerSelectionChangedCommand
         {
@@ -38,10 +51,26 @@ namespace TennisPageControler.ViewModels
                 InvokePropertyChanged(() => PlayerSelectionChangedCommand);
             }
         }
+        private bool m_MatchStarted;
+        public bool MatchStarted
+        {
+            get
+            {
+                return m_MatchStarted;
+            }
+            set
+            {
+                m_MatchStarted = value;
+                InvokePropertyChanged(() => MatchStarted);
+            }
+        }
         #endregion
         public TennisScoringViewModel()
         {
-            StartMatch();
+            MatchStartCommand = new RelayCommand((o) =>
+            {
+                StartMatch();
+            });
             PushToSpectorsCommand = new RelayCommand((o) =>
             {
                 PushResult(SelectedPointType);
@@ -67,7 +96,8 @@ namespace TennisPageControler.ViewModels
 
         private void StartMatch()
         {
-            AddPlayers();
+            AddPlayers(SelectedSetCount);
+            MatchStarted = true;
         }
     }
 }

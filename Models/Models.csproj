@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Navigation.cs" />
     <Compile Include="PerfomanceAnalyser.cs" />
+    <Compile Include="SetCountEnum.cs" />
     <Compile Include="PointTypeEnum.cs" />
     <Compile Include="Sets.cs" />
     <Compile Include="Player.cs" />

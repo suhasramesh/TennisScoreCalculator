@@ -15,8 +15,8 @@ namespace Models
         const string m_PlayerName2 = "Kevin";
 
         #region Properties		
-        private IList<Player> m_Players = new List<Player>();
-        public IList<Player> Players
+        private ObservableCollection<Player> m_Players = new ObservableCollection<Player>();
+        public ObservableCollection<Player> Players
         {
             get => m_Players;
             set
@@ -87,6 +87,8 @@ namespace Models
         public bool Deuce { get; set; }
         public bool PlayerChanged { get; set; }
 
+        private int TotalSet { get; set; }
+
         private void SetServe()
         {
             foreach(var player in Players)
@@ -94,11 +96,12 @@ namespace Models
                 player.IsServe = SelectedServingPlayer.Name == player.Name ? true : false;
             }
         }
-        public void AddPlayers()
+        public void AddPlayers(SetCountEnum selecteCount)
         {
-            Players = new List<Player>();
-            Player1 = new Player(m_PlayerName1);
-            Player2 = new Player(m_PlayerName2);
+            TotalSet = selecteCount == SetCountEnum.SC_Five ? 5 : 3;
+            Players = new ObservableCollection<Player>();
+            Player1 = new Player(m_PlayerName1, TotalSet);
+            Player2 = new Player(m_PlayerName2, TotalSet);
             Players.Add(Player1);
             Players.Add(Player2);
             Player1CurrentSet = Player1.SetPoints[0];
@@ -235,18 +238,15 @@ namespace Models
             }
             else
             {
-                Player1CurrentSet = new Sets();
-                Player1.SetPoints.Add(Player1CurrentSet);
-
-                Player2CurrentSet = new Sets();
-                Player2.SetPoints.Add(Player2CurrentSet);
+                throw new ArgumentException("Current set " + CurrentSetNumber.ToString() + " is grater than the set count assigned" + Player1.SetPoints.Count.ToString());
             }
         }
 
         public bool CheckMatchWin()
         {
-           Player1.MatchWon = ((Player1.SetsWonCount >= 2) && Player1.SetsWonCount >= Player2.SetsWonCount + 1) ? true : false;
-           Player2.MatchWon = (Player2.SetsWonCount >= 2) && Player2.SetsWonCount >= Player1.SetsWonCount + 1 ? true : false;
+           int minSetWin = TotalSet == 3 ? 2 : 3;
+           Player1.MatchWon = ((Player1.SetsWonCount >= minSetWin) && Player1.SetsWonCount >= Player2.SetsWonCount + 1) ? true : false;
+           Player2.MatchWon = (Player2.SetsWonCount >= minSetWin) && Player2.SetsWonCount >= Player1.SetsWonCount + 1 ? true : false;
             return Player1.MatchWon || Player2.MatchWon;
         }
 
