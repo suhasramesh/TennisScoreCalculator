@@ -17,6 +17,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes;component/ResourceDictionary/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Conv:SameStringToVisibilityConverter x:Key="SameStringToVisConv"/>
             <Conv:InverseNullToVisibilityConverter x:Key="InvNullToVisConv" />
             <Conv:InverseBoolToVisibilityConverter x:Key="InvBoolToVisConv" />
 
@@ -28,7 +29,7 @@
                     <x:Type TypeName="models:PointTypeEnum" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            
+
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
@@ -53,54 +54,116 @@
                     HorizontalAlignment="Center"
                     Style="{StaticResource StdMainTextBlockStyle}"
                     Text="Spectators Panel" />
-                <!--<DataGrid
+                <DataGrid
                     Name="PlayersGrid"
                     Grid.Row="1"
-                    IsReadOnly="True"
-                    Background="Transparent"
+                    Margin="30"
+                    HorizontalAlignment="Center"
+                    AutoGenerateColumns="False"
                     BorderBrush="Transparent"
-                    ItemsSource="{Binding Players}"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding Players, UpdateSourceTrigger=PropertyChanged}"
                     RowBackground="Transparent"
                     Style="{StaticResource DataGridStyle}">
-                    <DataGrid.Resources>
-                        <ResourceDictionary>
-                            <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
-                                <Setter Property="Background" Value="{x:Null}" />
-                                <Setter Property="BorderBrush" Value="{x:Null}" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Background" Value="{x:Null}" />
-                                        <Setter Property="BorderBrush" Value="{x:Null}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                            <Style TargetType="{x:Type DataGridRow}">
-                                <Setter Property="Background" Value="{x:Null}" />
-                                <Setter Property="BorderBrush" Value="{x:Null}" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Background" Value="{x:Null}" />
-                                        <Setter Property="BorderBrush" Value="{x:Null}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ResourceDictionary>
-                    </DataGrid.Resources>
                     <DataGrid.Columns>
-                -->
-                <!--  SetPoint  -->
-                <!--
-                        <DataGridTemplateColumn
-                            Width="Auto"
-                            IsReadOnly="True">
+                        <DataGridTemplateColumn Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}" Style="{StaticResource StdTextBlockStyle}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{StaticResource StdTextBlockStyle}" Text="{Binding Name}" />
+                                        <Ellipse
+                                            Grid.Column="1"
+                                            Width="10"
+                                            Height="10"
+                                            HorizontalAlignment="Right"
+                                            Fill="Yellow">
+                                            <Ellipse.Visibility>
+                                                <MultiBinding Converter="{StaticResource SameStringToVisConv}">
+                                                    <Binding Path="Name" />
+                                                    <Binding Path="SelectedPointPlayer" />
+                                                </MultiBinding>
+                                            </Ellipse.Visibility>
+                                        </Ellipse>
+                                            
+                                    </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="Green" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="False" />
+                                    </Style.Triggers>
+                                </Style>
+
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <!--  SetPoint  -->
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataGrid
+                                        AutoGenerateColumns="False"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        CanUserAddRows="True"
+                                        ItemsSource="{Binding SetPoints, UpdateSourceTrigger=PropertyChanged}"
+                                        RowBackground="Transparent"
+                                        Style="{StaticResource DataGridStyle}">
+                                        <DataGrid.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </DataGrid.ItemsPanel>
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn Width="Auto">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Style="{StaticResource StdTextBlockStyle}" Text="{Binding GamePoints}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.CellStyle>
+                                                    <Style TargetType="{x:Type DataGridCell}">
+                                                        <Setter Property="Background" Value="LightGreen" />
+                                                        <Setter Property="BorderBrush" Value="White" />
+                                                        <Setter Property="BorderThickness" Value="1" />
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsSelected" Value="False" />
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGridTemplateColumn.CellStyle>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="Auto" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource StdTextBlockStyle}" Text="{Binding CurrentPoints}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="Gray" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="False" />
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-                </DataGrid>-->
+                </DataGrid>
             </Grid>
         </Grid>
         <Path
@@ -146,6 +209,7 @@
                     Text="Select the point player" />
                 <ComboBox
                     Grid.Row="1"
+                    x:Name="SelectedServePlayerComboBox"
                     Grid.Column="1"
                     Margin="10"
                     HorizontalAlignment="Left"
@@ -159,7 +223,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
-                
+
                 <!--  Select type on point  -->
                 <TextBlock
                     Grid.Row="2"
@@ -208,7 +272,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                
+
                 <Button
                     Grid.Row="3"
                     Grid.ColumnSpan="2"

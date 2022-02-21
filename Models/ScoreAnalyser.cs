@@ -97,6 +97,7 @@ namespace Models
             Players.Add(Player2);
             Player1CurrentSet = Player1.SetPoints[0];
             Player2CurrentSet = Player2.SetPoints[0];
+            SelectedPointPlayer = Player1;
         }
         private int GetPlayerCurrentPoints(int currentPoints)
         {
@@ -181,13 +182,15 @@ namespace Models
                     if (Player1.HasGameWin)
                     {
                         Player1CurrentSet.GamePoints++;
+                        Player1.CurrentPoints = 0;
                     }
                     else
                     {
                         Player2CurrentSet.GamePoints++;
+                        Player2.CurrentPoints = 0;
                     }
-                    bool setWinPlayer1 = Player1CurrentSet.GamePoints >= Player2CurrentSet.GamePoints + 2 ? true : false;
-                    bool setWinPlayer2 = Player2CurrentSet.GamePoints >= Player1CurrentSet.GamePoints + 2 ? true : false;
+                    bool setWinPlayer1 = (Player1CurrentSet.GamePoints >= 6) && Player1CurrentSet.GamePoints >= Player2CurrentSet.GamePoints + 2 ? true : false;
+                    bool setWinPlayer2 = (Player2CurrentSet.GamePoints >= 6) && Player2CurrentSet.GamePoints >= Player1CurrentSet.GamePoints + 2 ? true : false;
                     if (setWinPlayer1 || setWinPlayer2)
                     {
                         if(Player1CurrentSet.SetNumber < Player1.SetPoints.Count)

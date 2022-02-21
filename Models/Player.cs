@@ -12,8 +12,18 @@ namespace Models
         public string Name { get;}
 
         public PerfomanceAnalyser Performace { get; set; }
-        
-        public List<Sets> SetPoints { get; set; }
+
+        private IList<Sets> m_SetPoints = new List<Sets>();
+        public IList<Sets> SetPoints
+        {
+            get => m_SetPoints;
+            set
+            {
+                m_SetPoints = value;
+                InvokePropertyChanged(() => SetPoints);
+            }
+
+        }
 
         public bool HasGameWin { get; set; }
 
