@@ -15,6 +15,8 @@ namespace TennisScoreCalculator.tests
         public void GetPlayerList_Test()
         {
             TennisScoringViewModel Analyser = new TennisScoringViewModel();
+            Analyser.SelectedSetCount = SetCountEnum.SC_Three;
+            Analyser.MatchStartCommand.Execute(null);
 
             IList<Player> players = Analyser.Players;
             Assert.True(players.Count == 2);
@@ -39,25 +41,31 @@ namespace TennisScoreCalculator.tests
             Assert.True(John.HasGameWin == true);
             Assert.True(Analyser.Player1CurrentSet.GamePoints == 0);
             Assert.True(John.CurrentPoints == 0);
+            Assert.True(John.Performace.Aces == 1);
 
             Kevin.SetPoints[1].GamePoints = 5;
             John.SetPoints[1].GamePoints = 3;
 
             Analyser.SelectedServingPlayer = John;
             Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(John.Performace.Aces == 2);
             Assert.True(John.CurrentPoints == 15);
             Analyser.PushResult(PointTypeEnum.PT_Fault);
             Assert.True(Kevin.CurrentPoints == 15);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Assert.True(John.Performace.DoubleFaults == 1);
             Assert.True(Kevin.CurrentPoints == 30);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
             Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(John.Performace.Aces == 3);
+            Assert.True(John.Performace.SecondServePoints == 1);
             Assert.True(John.CurrentPoints == 30);
             Analyser.PushResult(PointTypeEnum.PT_Fault);
             Assert.True(Kevin.CurrentPoints == 40);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);
+            Assert.True(John.Performace.DoubleFaults == 2);
             Assert.True(Kevin.HasGameWin == true);
             Assert.True(John.HasGameWin == false);
 
@@ -73,6 +81,7 @@ namespace TennisScoreCalculator.tests
             Analyser.PushResult(PointTypeEnum.PT_Ace);
             Analyser.PushResult(PointTypeEnum.PT_Ace);
             Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(Kevin.Performace.Aces == 4);
             Analyser.CheckMatchWin();
             Assert.True(Kevin.MatchWon == true);
 

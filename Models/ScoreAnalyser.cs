@@ -25,6 +25,8 @@ namespace Models
                 InvokePropertyChanged(() => Players);
             }
         }
+
+
         private Player m_SelectedServingPlayer = null;
         public Player SelectedServingPlayer
         {
@@ -36,8 +38,6 @@ namespace Models
                 InvokePropertyChanged(() => SelectedServingPlayer);
             }
         }
-
-
 
         private string m_MatchWinner = "";
         public string MatchWinner
@@ -118,15 +118,15 @@ namespace Models
             }
             return currentPoints;
         }
-        public void PushResult(PointTypeEnum selectedPointType)
+        private bool CheckPerformance(PointTypeEnum selectedPointType)
         {
-            if(SelectedServingPlayer == null)
-            {
-                return;
-            }
             if (selectedPointType == PointTypeEnum.PT_Ace)
             {
                 SelectedServingPlayer.Performace.Aces++;
+                if (!PreviousServePoint && !PlayerChanged && PreviousServeOnFault)
+                {
+                    SelectedServingPlayer.Performace.SecondServePoints++;
+                }
             }
             else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && PreviousServeOnFault && !PlayerChanged)
             {
@@ -136,33 +136,43 @@ namespace Models
             else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && !PreviousServeOnFault)
             {
                 PreviousServeOnFault = true; // store previous result
+                return false; //SR:: no need to add points for first serve fault
+            }
+            else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint || PlayerChanged))
+            {
+                SelectedServingPlayer.Performace.FirstServePoints++;
+            }
+            else if (selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged)
+            {
+                SelectedServingPlayer.Performace.SecondServePoints++;
+            }
+            return true;
+        }
+        public void PushResult(PointTypeEnum selectedPointType)
+        {
+            if(SelectedServingPlayer == null)
+            {
                 return;
             }
-           // else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint|| PlayerChanged))
-           // {
-           //     SelectedServingPlayer.Performace.FirstServePoints++;
-           // }
-           //else if(selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged)
-           // {
-           //     SelectedServingPlayer.Performace.SecondServePoints++;
-           // }
-
-            foreach (var player in Players)
+            if(CheckPerformance(selectedPointType))
             {
-                if(SelectedServingPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
+                foreach (var player in Players)
                 {
-                    ServeCompleted(player.Name);
-                    break;
+                    if (SelectedServingPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
+                    {
+                        ServeCompleted(player.Name);
+                        break;
+                    }
+                    else if (SelectedServingPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
+                    {
+                        ServeCompleted(player.Name);
+                        break;
+                    }
                 }
-                else if(SelectedServingPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
-                {
-                    ServeCompleted(player.Name);
-                    break;
-                }
-            }
-            PlayerChanged = false;
+                PlayerChanged = false;
 
-            PreviousServePoint = (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace) ? true : false;
+                PreviousServePoint = (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace) ? true : false;
+            }
         }
         public void ServeCompleted(string playerNameWithPoint)
         {

@@ -9,6 +9,7 @@ namespace Models
 {
     public class Player : NotifyPropertyChanged
     {
+        #region property
         private IList<Sets> m_SetPoints = new List<Sets>();
         public IList<Sets> SetPoints
         {
@@ -21,7 +22,6 @@ namespace Models
 
         }
 
-        public bool HasGameWin { get; set; }
         
         private bool m_Advantage = false;
         public bool Advantage
@@ -70,9 +70,22 @@ namespace Models
             }
         }
 
-        public string Name { get; }
+        
 
-        public PerfomanceAnalyser Performace { get; set; }
+        private PerfomanceAnalyser m_Performace ;
+        public PerfomanceAnalyser Performace
+        {
+            get => m_Performace;
+            set
+            {
+                m_Performace = value;
+                InvokePropertyChanged(() => Performace);
+            }
+        }
+        #endregion
+
+        public string Name { get; }
+        public bool HasGameWin { get; set; }
 
         public Player(string name = "", int setCount = 3) 
         {

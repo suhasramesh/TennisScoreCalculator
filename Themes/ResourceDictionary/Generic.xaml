@@ -39,7 +39,6 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="CanUserAddRows" Value="False"/>
-        <Setter Property="HeadersVisibility" Value="None"/>
         <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>
     </Style>
 

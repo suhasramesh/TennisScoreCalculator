@@ -11,9 +11,10 @@ namespace TennisPageControler.ViewModels
 {
     public class TennisScoringViewModel: ScoreAnalyser
     {
+        #region Command
         public ICommand PushToSpectorsCommand { get; set; }
         public ICommand MatchStartCommand { get; set; }
-
+        #endregion
         #region Properties	
 
         private PointTypeEnum m_SelectedPointType ;
@@ -93,7 +94,6 @@ namespace TennisPageControler.ViewModels
                 PreviousServePoint = false;
             });
         }
-
         private void StartMatch()
         {
             AddPlayers(SelectedSetCount);
