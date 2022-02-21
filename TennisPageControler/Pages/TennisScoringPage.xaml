@@ -17,7 +17,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes;component/ResourceDictionary/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Conv:SameStringToVisibilityConverter x:Key="SameStringToVisConv"/>
+            <Conv:BoolToVisibilityConverter x:Key="BoolToVisConv"/>
             <Conv:InverseNullToVisibilityConverter x:Key="InvNullToVisConv" />
             <Conv:InverseBoolToVisibilityConverter x:Key="InvBoolToVisConv" />
 
@@ -80,15 +80,10 @@
                                             Width="10"
                                             Height="10"
                                             HorizontalAlignment="Right"
-                                            Fill="Yellow">
-                                            <Ellipse.Visibility>
-                                                <MultiBinding Converter="{StaticResource SameStringToVisConv}">
-                                                    <Binding Path="Name" />
-                                                    <Binding Path="SelectedPointPlayer" />
-                                                </MultiBinding>
-                                            </Ellipse.Visibility>
+                                            Fill="Yellow"
+                                            Visibility="{Binding IsServe, Converter={StaticResource BoolToVisConv}}">
                                         </Ellipse>
-                                            
+
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -130,7 +125,7 @@
                                                 </DataGridTemplateColumn.CellTemplate>
                                                 <DataGridTemplateColumn.CellStyle>
                                                     <Style TargetType="{x:Type DataGridCell}">
-                                                        <Setter Property="Background" Value="LightGreen" />
+                                                        <Setter Property="Background" Value="Green" />
                                                         <Setter Property="BorderBrush" Value="White" />
                                                         <Setter Property="BorderThickness" Value="1" />
                                                         <Style.Triggers>
@@ -215,7 +210,7 @@
                     HorizontalAlignment="Left"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding Players}"
-                    SelectedItem="{Binding SelectedPointPlayer}"
+                    SelectedItem="{Binding SelectedServingPlayer}"
                     Style="{StaticResource StdComboStyle}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
@@ -230,7 +225,7 @@
                     Grid.Column="0"
                     Margin="10"
                     Style="{StaticResource StdTextBlockStyle}"
-                    Text="Select the point player" />
+                    Text="Select the serving player" />
                 <ComboBox
                     Grid.Row="2"
                     Grid.Column="1"

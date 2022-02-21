@@ -23,15 +23,15 @@ namespace Models
                 InvokePropertyChanged(() => Players);
             }
         }
-
-        private Player m_SelectedPointPlayer = null;
-        public Player SelectedPointPlayer
+        private Player m_SelectedServingPlayer = null;
+        public Player SelectedServingPlayer
         {
-            get => m_SelectedPointPlayer;
+            get => m_SelectedServingPlayer;
             set
             {
-                m_SelectedPointPlayer = value;
-                InvokePropertyChanged(() => SelectedPointPlayer);
+                m_SelectedServingPlayer = value;
+                SetServe();
+                InvokePropertyChanged(() => SelectedServingPlayer);
             }
         }
 
@@ -88,6 +88,20 @@ namespace Models
         public bool PreviousServeOnFault { get; set; }
         public bool PreviousServePoint { get; set; }
 
+        private void SetServe()
+        {
+            foreach(var player in Players)
+            {
+                if(SelectedServingPlayer.Name == player.Name)
+                {
+                    player.IsServe = true;
+                }
+                else
+                {
+                    player.IsServe = false;
+                }
+            }
+        }
         public void AddPlayers()
         {
             Players = new List<Player>();
@@ -97,7 +111,7 @@ namespace Models
             Players.Add(Player2);
             Player1CurrentSet = Player1.SetPoints[0];
             Player2CurrentSet = Player2.SetPoints[0];
-            SelectedPointPlayer = Player1;
+            SelectedServingPlayer = Player1;
         }
         private int GetPlayerCurrentPoints(int currentPoints)
         {
@@ -110,17 +124,17 @@ namespace Models
         }
         public void PushResult(PointTypeEnum selectedPointType)
         {
-            if(SelectedPointPlayer == null)
+            if(SelectedServingPlayer == null)
             {
                 return;
             }
             if (selectedPointType == PointTypeEnum.PT_Ace)
             {
-                SelectedPointPlayer.Performace.Aces++;
+                SelectedServingPlayer.Performace.Aces++;
             }
             else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && PreviousServeOnFault && !PlayerChanged)
             {
-                SelectedPointPlayer.Performace.DoubleFaults++;
+                SelectedServingPlayer.Performace.DoubleFaults++;
                 PreviousServeOnFault = false;
             }
             else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && !PreviousServeOnFault)
@@ -130,21 +144,21 @@ namespace Models
             }
            // else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint|| PlayerChanged))
            // {
-           //     SelectedPointPlayer.Performace.FirstServePoints++;
+           //     SelectedServingPlayer.Performace.FirstServePoints++;
            // }
            //else if(selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged)
            // {
-           //     SelectedPointPlayer.Performace.SecondServePoints++;
+           //     SelectedServingPlayer.Performace.SecondServePoints++;
            // }
 
             foreach (var player in Players)
             {
-                if(SelectedPointPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
+                if(SelectedServingPlayer.Name == player.Name && (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace))
                 {
                     ServeCompleted(player.Name);
                     break;
                 }
-                else if(SelectedPointPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
+                else if(SelectedServingPlayer.Name != player.Name && (selectedPointType == PointTypeEnum.PT_Fault || selectedPointType == PointTypeEnum.PT_FaultOnServe))
                 {
                     ServeCompleted(player.Name);
                     break;

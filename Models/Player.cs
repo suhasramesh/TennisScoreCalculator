@@ -38,6 +38,17 @@ namespace Models
                 InvokePropertyChanged(() => CurrentPoints);
             }
         }
+
+        private bool m_IsServe = false;
+        public bool IsServe
+        {
+            get => m_IsServe;
+            set
+            {
+                m_IsServe = value;
+                InvokePropertyChanged(() => IsServe);
+            }
+        }
         public Player(string name = "") 
         {
             this.Name = name;
