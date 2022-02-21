@@ -31,15 +31,16 @@ namespace TennisScoreCalculator.tests
             John.SetPoints[0].GamePoints = 6;
             Kevin.SetPoints[0].GamePoints = 5;
             
-            Analyser.SelectedPointPlayer = John;
+            Analyser.SelectedServingPlayer = John;
             Analyser.PushResult(PointTypeEnum.PT_Ace);
-            Assert.True(John.SetPoints.Count == 2);
-            Assert.True(Kevin.SetPoints.Count == 2);
-            John.CurrentSet = John.SetPoints[1];
-            Assert.True(John.CurrentPoints == 0);
+            Assert.True(John.SetPoints.Count == 3);
+            Assert.True(Kevin.SetPoints.Count == 3);
             Assert.True(John.SetPoints[0].GamePoints == 7);
+            Assert.True(John.HasGameWin == true);
+            Assert.True(Analyser.Player1CurrentSet.GamePoints == 0);
+            Assert.True(John.CurrentPoints == 0);
 
-            Analyser.SelectedPointPlayer = Kevin;
+            Analyser.SelectedServingPlayer = Kevin;
             Analyser.PushResult(PointTypeEnum.PT_Ace);
             Analyser.PushResult(PointTypeEnum.PT_Fault);
             Analyser.PushResult(PointTypeEnum.PT_FaultOnServe);

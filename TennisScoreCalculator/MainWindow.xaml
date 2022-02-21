@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:TennisPageControler.Pages;assembly=TennisPageControler"
     xmlns:vms="clr-namespace:TennisPageControler.ViewModels;assembly=TennisPageControler"
-    Title="Tennis Game"
+    Title="Tennis"
     Width="800"
     Height="450"
     mc:Ignorable="d">

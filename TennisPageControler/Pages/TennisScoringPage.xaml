@@ -201,7 +201,7 @@
                     Grid.Column="0"
                     Margin="10"
                     Style="{StaticResource StdTextBlockStyle}"
-                    Text="Select the point player" />
+                    Text="Select the serving player" />
                 <ComboBox
                     Grid.Row="1"
                     x:Name="SelectedServePlayerComboBox"
