@@ -35,10 +35,10 @@ namespace Models
             {
                 m_SelectedServingPlayer = value;
                 SetServe();
+                ResetPreviousResult();
                 InvokePropertyChanged(() => SelectedServingPlayer);
             }
         }
-
         private string m_MatchWinner = "";
         public string MatchWinner
         {
@@ -81,11 +81,12 @@ namespace Models
         protected Player Player2 { get; set; }
         private int CurrentSetNumber { get; set; }
 
-        public bool PreviousServeOnFault { get; set; }
-        public bool PreviousServePoint { get; set; }
+        private bool PreviousServeOnFault { get; set; }
+        private bool PreviousDoubleFault { get; set; }
+        private bool PreviousServePoint { get; set; }
 
-        public bool Deuce { get; set; }
-        public bool PlayerChanged { get; set; }
+        private bool Deuce { get; set; }
+        private bool PlayerChanged { get; set; }
 
         private int TotalSet { get; set; }
 
@@ -118,33 +119,45 @@ namespace Models
             }
             return currentPoints;
         }
+        private void ResetPreviousResult()
+        {
+            PlayerChanged = true;
+            PreviousDoubleFault = false;
+            PreviousServeOnFault = false;
+            PreviousServePoint = false;
+        }
         private bool CheckPerformance(PointTypeEnum selectedPointType)
         {
-            if (selectedPointType == PointTypeEnum.PT_Ace)
+            if (selectedPointType == PointTypeEnum.PT_Ace)   // SR: Check Ace condition together with second serve point
             {
                 SelectedServingPlayer.Performace.Aces++;
-                if (!PreviousServePoint && !PlayerChanged && PreviousServeOnFault)
+                if (!PlayerChanged && !PreviousServePoint && !PreviousDoubleFault)
                 {
                     SelectedServingPlayer.Performace.SecondServePoints++;
                 }
+                PreviousDoubleFault = false;
             }
-            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && PreviousServeOnFault && !PlayerChanged)
+            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && PreviousServeOnFault && !PlayerChanged) //SR : Check double fault condition
             {
                 SelectedServingPlayer.Performace.DoubleFaults++;
+                PreviousDoubleFault = true;
                 PreviousServeOnFault = false;
             }
-            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && !PreviousServeOnFault)
+            else if (selectedPointType == PointTypeEnum.PT_FaultOnServe && !PreviousServeOnFault) // SR: Check serve fault
             {
+                PreviousDoubleFault = false;
                 PreviousServeOnFault = true; // store previous result
                 return false; //SR:: no need to add points for first serve fault
             }
-            else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint || PlayerChanged))
+            else if (selectedPointType == PointTypeEnum.PT_Point && (PreviousServePoint || PlayerChanged)) //SR : Check first serve point
             {
                 SelectedServingPlayer.Performace.FirstServePoints++;
+                PreviousDoubleFault = false;
             }
-            else if (selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged)
+            else if (selectedPointType == PointTypeEnum.PT_Point && !PreviousServePoint && !PlayerChanged) //SR: CHeck second serve point
             {
                 SelectedServingPlayer.Performace.SecondServePoints++;
+                PreviousDoubleFault = false;
             }
             return true;
         }

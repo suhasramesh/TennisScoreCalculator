@@ -92,7 +92,7 @@ namespace Models
             this.Name = name;
             this.SetPoints = new List<Sets>();
             this.Performace = new PerfomanceAnalyser();
-            //SR: Initailly 3 sets are added, used this for better visúalisation
+            //SR: Initiate sets for each player
             for (int iSet = 0; iSet < setCount; iSet++)
             {
                 var set = new Sets();

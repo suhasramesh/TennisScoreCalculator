@@ -1,18 +1,16 @@
 ﻿<Window
-    x:Class="TennisScoreCalculator.MainWindow"
+    x:Class="TennisPageControler.Windows.SpectatorWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TennisScoreCalculator"
+    xmlns:local="clr-namespace:TennisPageControler.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pages="clr-namespace:TennisPageControler.Pages;assembly=TennisPageControler"
-    xmlns:vms="clr-namespace:TennisPageControler.ViewModels;assembly=TennisPageControler"
-    d:DesignHeight="100"
-    d:DesignWidth="250"
+    xmlns:pages="clr-namespace:TennisPageControler.Pages"
+    xmlns:vms="clr-namespace:TennisPageControler.ViewModels"
     mc:Ignorable="d">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vms:TennisRefereeViewModel}">
-            <pages:TennisRefereePage />
+        <DataTemplate DataType="{x:Type vms:TennisScoringViewModel}">
+            <pages:TennisScoringPage />
         </DataTemplate>
     </Window.Resources>
     <Grid Background="#eeeeee">

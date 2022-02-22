@@ -13,20 +13,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TennisPageControler.ViewModels;
 
-namespace TennisScoreCalculator
+namespace TennisPageControler.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for RefereeWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SpectatorWindow : Window
     {
-        public MainWindow()
+        public SpectatorWindow(TennisRefereeViewModel refereeVm)
         {
             NavigationModel NV = new NavigationModel();
             InitializeComponent();
             DataContext = NV;
-            NV.SelectedViewModel = new TennisPageControler.ViewModels.TennisRefereeViewModel();
+            NV.SelectedViewModel = refereeVm;
         }
     }
 }

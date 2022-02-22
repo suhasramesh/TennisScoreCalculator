@@ -11,10 +11,10 @@ namespace TennisScoreCalculator.tests
 {
     public class Calculator
     {
-        [Fact]
+        [StaFact]
         public void GetPlayerList_Test()
         {
-            TennisScoringViewModel Analyser = new TennisScoringViewModel();
+            TennisRefereeViewModel Analyser = new TennisRefereeViewModel();
             Analyser.SelectedSetCount = SetCountEnum.SC_Three;
             Analyser.MatchStartCommand.Execute(null);
 
@@ -82,6 +82,10 @@ namespace TennisScoreCalculator.tests
             Analyser.PushResult(PointTypeEnum.PT_Ace);
             Analyser.PushResult(PointTypeEnum.PT_Ace);
             Assert.True(Kevin.Performace.Aces == 4);
+            Analyser.PushResult(PointTypeEnum.PT_Fault);
+            Analyser.PushResult(PointTypeEnum.PT_Ace);
+            Assert.True(Kevin.Performace.Aces == 5);
+            Assert.True(Kevin.Performace.SecondServePoints == 1);
             Analyser.CheckMatchWin();
             Assert.True(Kevin.MatchWon == true);
 

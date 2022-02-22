@@ -15,9 +15,9 @@ namespace TennisPageControler.Converters
         {
             if(value is int)
             {
-                return (int)value > -1 ? value.ToString() : ""; 
+                return (int)value > -1 ? value.ToString() : string.Empty; 
             }
-            return "";
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

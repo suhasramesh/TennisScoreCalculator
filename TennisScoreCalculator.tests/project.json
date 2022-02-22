@@ -10,6 +10,7 @@
   "dependencies": {
     "xunit": "2.4.1",
     "xunit.runner.console": "2.4.1",
-    "xunit.runner.visualstudio": "2.4.3"
+    "xunit.runner.visualstudio": "2.4.3",
+    "Xunit.StaFact": "1.1.11"
   }
 }

@@ -17,7 +17,7 @@ namespace TennisPageControler.Converters
             {
                 return (int)value > 40 ? 40.ToString() : value.ToString(); 
             }
-            return "";
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -53,6 +53,9 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseNullToVisibilityConverter.cs" />
+    <Compile Include="Pages\TennisRefereePage.xaml.cs">
+      <DependentUpon>TennisRefereePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TennisScoringPage.xaml.cs">
       <DependentUpon>TennisScoringPage.xaml</DependentUpon>
     </Compile>
@@ -62,7 +65,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\TennisRefereeViewModel.cs" />
     <Compile Include="ViewModels\TennisScoringViewModel.cs" />
+    <Compile Include="Windows\SpectatorWindow.xaml.cs">
+      <DependentUpon>SpectatorWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj">
@@ -85,10 +92,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Pages\TennisRefereePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\TennisScoringPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\SpectatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
