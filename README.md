@@ -3,9 +3,9 @@
 This is my ReadMe File
 ==============================
 
-Instal Modules package
+Instal TennisPageControler package, Modules, Themes and MVVmBase are the dependencies
 
-To use this library, add using statement for Models.
+To use this library, add using statement for TennisPageControler.
 
 Execute "ViewModels.MatchStartCommand" to start the match.
 
