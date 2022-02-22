@@ -97,7 +97,7 @@ namespace Models
                 player.IsServe = SelectedServingPlayer.Name == player.Name ? true : false;
             }
         }
-        public void AddPlayers(SetCountEnum selecteCount)
+        protected void AddPlayers(SetCountEnum selecteCount)
         {
             TotalSet = selecteCount == SetCountEnum.SC_Five ? 5 : 3;
             Players = new ObservableCollection<Player>();
@@ -187,7 +187,7 @@ namespace Models
                 PreviousServePoint = (selectedPointType == PointTypeEnum.PT_Point || selectedPointType == PointTypeEnum.PT_Ace) ? true : false;
             }
         }
-        public void ServeCompleted(string playerNameWithPoint)
+        private void ServeCompleted(string playerNameWithPoint)
         {
             try
             {
